@@ -1,13 +1,16 @@
 //package project;
+import java.net.*;
 import java.io.*;
+import java.nio.*;
+import java.nio.channels.*;
 import java.util.*;
 
 import project.CommonConfig;
 import project.PeerInfoConfig;
 import project.RemotePeerInfo;
 
-public class PeerProcess{
-    
+public class PeerProcess {
+    // public int id;
     public static void printCommonConfig(CommonConfig c){
         System.out.println(c.NumberOfPreferredNeighbors);
         System.out.println(c.UnchokingInterval);
@@ -21,12 +24,41 @@ public class PeerProcess{
             System.out.println(i.peerAddress+" "+i.peerId+" "+i.peerPort+" "+i.containsFile);
         }
     }
-    public static void main(String[] args){
+    public static void makeTcpConnection(int id,RemotePeerInfo p){
+        System.out.println(id+"-"+p.peerId);
+    }
+    public static void main(String[] args) throws Exception {
         CommonConfig c = new CommonConfig();
         PeerInfoConfig pic=new PeerInfoConfig();
         c.loadCommonFile();
         pic.getConfiguration();
-        printCommonConfig(c);
-        printPeerConfig(pic);
+
+        int id = Integer.parseInt(args[0]);
+        Boolean make = true;
+        int myPort = 8080;
+        for (RemotePeerInfo p:pic.peerInfoList){
+            if(p.peerId==id){myPort=p.peerPort;break;}
+        }
+        ServerSocket listener = new ServerSocket(myPort);;
+        for(int i=0;i<pic.peerInfoList.size();i++){
+            if(pic.peerInfoList.get(i).peerId==id){
+                make = false;
+                myPort = pic.peerInfoList.get(i).peerPort;
+                // listener = new ServerSocket(myPort);
+                System.out.println("listening on port "+myPort);
+            }
+            if(make){
+                System.out.println("requesting to "+pic.peerInfoList.get(i).peerAddress+" port "+pic.peerInfoList.get(i).peerPort);
+                Socket requestSocket = new Socket(pic.peerInfoList.get(i).peerAddress, pic.peerInfoList.get(i).peerPort);
+            }else{
+                if(id != pic.peerInfoList.get(i).peerId){
+                    Socket temp=listener.accept();
+                    System.out.println("Connected to "+temp.getInetAddress()+"/"+temp.getPort()+"/");
+                }
+            }
+        }
+        System.out.println(id);
     }
-};
+
+    
+}
