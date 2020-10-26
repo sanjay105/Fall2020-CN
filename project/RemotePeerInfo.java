@@ -6,15 +6,16 @@
  * or other environments not in CISE, it is not guaranteed to work properly.
  * It is your responsibility to adapt this program to your running environment.
  */
-
+package project;
 public class RemotePeerInfo {
 	public String peerId;
 	public String peerAddress;
 	public String peerPort;
-	
-	public RemotePeerInfo(String pId, String pAddress, String pPort) {
+	public int containsFile;
+	public RemotePeerInfo(String pId, String pAddress, String pPort, int cFile) {
 		peerId = pId;
 		peerAddress = pAddress;
 		peerPort = pPort;
+		containsFile = cFile;
 	}
 }
