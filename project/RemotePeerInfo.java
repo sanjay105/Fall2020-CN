@@ -8,14 +8,14 @@
  */
 package project;
 public class RemotePeerInfo {
-	public String peerId;
+	public int peerId;
 	public String peerAddress;
-	public String peerPort;
+	public int peerPort;
 	public int containsFile;
-	public RemotePeerInfo(String pId, String pAddress, String pPort, int cFile) {
-		peerId = pId;
+	public RemotePeerInfo(String pId, String pAddress, String pPort, String cFile) {
+		peerId = Integer.parseInt(pId);
 		peerAddress = pAddress;
-		peerPort = pPort;
-		containsFile = cFile;
+		peerPort = Integer.parseInt(pPort);
+		containsFile = Integer.parseInt(cFile);
 	}
 }

@@ -14,7 +14,7 @@ public class PeerInfoConfig {
 			BufferedReader in = new BufferedReader(new FileReader("project/PeerInfo.cfg"));
 			while((st = in.readLine()) != null) {
 				String[] tokens = st.split("\\s+");
-				peerInfoList.add(new RemotePeerInfo(tokens[0], tokens[1], tokens[2], Integer.parseInt(tokens[3])));
+				peerInfoList.add(new RemotePeerInfo(tokens[0], tokens[1], tokens[2], tokens[3]));
 			}
 			in.close();
 		}
