@@ -1,9 +1,11 @@
 //package project;
 import java.net.*;
+import java.net.http.WebSocket.Listener;
 import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
 import java.util.*;
+import java.lang.*;
 
 import project.CommonConfig;
 import project.PeerInfoConfig;
@@ -27,7 +29,7 @@ public class PeerProcess {
     public static void makeTcpConnection(int id,RemotePeerInfo p){
         System.out.println(id+"-"+p.peerId);
     }
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)  throws Exception  {
         CommonConfig c = new CommonConfig();
         PeerInfoConfig pic=new PeerInfoConfig();
         c.loadCommonFile();
@@ -52,13 +54,25 @@ public class PeerProcess {
                 Socket requestSocket = new Socket(pic.peerInfoList.get(i).peerAddress, pic.peerInfoList.get(i).peerPort);
             }else{
                 if(id != pic.peerInfoList.get(i).peerId){
-                    Socket temp=listener.accept();
-                    System.out.println("Connected to "+temp.getInetAddress()+"/"+temp.getPort()+"/");
+                    Thread t = new Thread(listener);
+                    t.start();
+                    
                 }
             }
         }
         System.out.println(id);
     }
 
-    
+    public void run(ServerSocket listener) throws Exception{
+        System.out.println("thread");
+        Socket sid = listener.accept();
+        System.out.println("Connected to "+sid.getInetAddress()+"/"+sid.getPort()+"/");
+        byte[] b;
+        boolean wh = true;
+        while(wh){
+            int len = sid.getInputStream().read(b);
+            System.out.println(b);
+            if(len == -100){wh= false;}
+        }
+    }
 }
